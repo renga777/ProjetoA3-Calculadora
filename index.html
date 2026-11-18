@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+  <meta name="theme-color" content="#1a1a2e"/>
+  <title>Zero 1</title>
+  <link rel="manifest" href="manifest.json"/>
+  <link rel="icon" href="icon.svg" type="image/svg+xml"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <span class="app-title">⚡ Zero 1</span>
+  <div class="topbar-right">
+    <select id="themeSelect" onchange="setTheme(this.value)">
+      <option value="dark">🌌 Nebula</option>
+      <option value="light">☀️ Light</option>
+      <option value="dracula">🧛 Dracula</option>
+      <option value="solarized">🌊 Solarized</option>
+    </select>
+  </div>
+</header>
+
+<!-- TABS -->
+<nav class="tabs">
+  <button class="tab active" onclick="switchTab('calc')"><span>🧮 Calculadora</span></button>
+  <button class="tab" onclick="switchTab('stats')"><span>📊 Estatística</span></button>
+  <button class="tab" onclick="switchTab('formulas')"><span>📐 Fórmulas</span></button>
+  <button class="tab" onclick="switchTab('history')"><span>🕓 Histórico</span></button>
+</nav>
+
+<!-- ═══════════════ TAB: CALCULADORA ═══════════════ -->
+<div id="tab-calc" class="tab-content active">
+  <div class="calculator">
+    <div class="display">
+      <div id="expression"></div>
+      <div id="result">0</div>
+    </div>
+    <div class="buttons">
+      <button class="btn fn" onclick="toggleMode()">DEG</button>
+      <button class="btn fn" onclick="inp('Math.PI')">π</button>
+      <button class="btn fn" onclick="inp('Math.E')">e</button>
+      <button class="btn fn" onclick="inp('Math.abs(')">|x|</button>
+      <button class="btn fn" onclick="inp('fact(')">n!</button>
+      <button class="btn clear" onclick="clearAll()">AC</button>
+
+      <button class="btn fn" onclick="inp('Math.sin(')">sin</button>
+      <button class="btn fn" onclick="inp('Math.cos(')">cos</button>
+      <button class="btn fn" onclick="inp('Math.tan(')">tan</button>
+      <button class="btn fn" onclick="inp('Math.log10(')">log</button>
+      <button class="btn fn" onclick="inp('Math.log(')">ln</button>
+      <button class="btn op" onclick="backspace()">⌫</button>
+
+      <button class="btn fn" onclick="inp('Math.asin(')">sin⁻¹</button>
+      <button class="btn fn" onclick="inp('Math.acos(')">cos⁻¹</button>
+      <button class="btn fn" onclick="inp('Math.atan(')">tan⁻¹</button>
+      <button class="btn fn" onclick="inp('Math.sqrt(')">√</button>
+      <button class="btn fn" onclick="inp('Math.cbrt(')">∛</button>
+      <button class="btn op" onclick="inp('%')">%</button>
+
+      <button class="btn fn" onclick="inp('Math.pow(10,')">10ˣ</button>
+      <button class="btn fn" onclick="inp('Math.pow(2,')">2ˣ</button>
+      <button class="btn fn" onclick="inp('Math.pow(Math.E,')">eˣ</button>
+      <button class="btn fn" onclick="inp('Math.pow(')">xʸ</button>
+      <button class="btn fn" onclick="inp('(1/(')">1/x</button>
+      <button class="btn op" onclick="inp('(')">(</button>
+
+      <button class="btn num" onclick="inp('7')">7</button>
+      <button class="btn num" onclick="inp('8')">8</button>
+      <button class="btn num" onclick="inp('9')">9</button>
+      <button class="btn op"  onclick="inp('/')">÷</button>
+      <button class="btn fn"  onclick="inpPow(2)">x²</button>
+      <button class="btn op"  onclick="inp(')')">)</button>
+
+      <button class="btn num" onclick="inp('4')">4</button>
+      <button class="btn num" onclick="inp('5')">5</button>
+      <button class="btn num" onclick="inp('6')">6</button>
+      <button class="btn op"  onclick="inp('*')">×</button>
+      <button class="btn fn"  onclick="inpPow(3)">x³</button>
+      <button class="btn op"  onclick="toggleSign()">±</button>
+
+      <button class="btn num" onclick="inp('1')">1</button>
+      <button class="btn num" onclick="inp('2')">2</button>
+      <button class="btn num" onclick="inp('3')">3</button>
+      <button class="btn op"  onclick="inp('-')">−</button>
+      <button class="btn fn"  onclick="inp('Math.log2(')">log₂</button>
+      <button class="btn fn"  onclick="memRecall()">MR</button>
+
+      <button class="btn num zero" onclick="inp('0')">0</button>
+      <button class="btn num" onclick="inputDot()">.</button>
+      <button class="btn eq"  onclick="calculate()">=</button>
+      <button class="btn op"  onclick="inp('+')">+</button>
+      <button class="btn fn"  onclick="memStore()">MS</button>
+      <button class="btn fn"  onclick="memClear()">MC</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ TAB: ESTATÍSTICA ═══════════════ -->
+<div id="tab-stats" class="tab-content">
+  <div class="stats-panel">
+    <p class="stats-hint">Insira os dados separados por vírgula, espaço ou ponto e vírgula.</p>
+    <textarea id="statsInput" class="stats-textarea"
+              placeholder="Ex: 4, 7, 13, 2, 1, 9, 7, 3"
+              rows="3" oninput="calcStats()"></textarea>
+    <div class="stats-btns">
+      <button class="action-btn" onclick="calcStats()">Calcular</button>
+      <button class="action-btn" onclick="clearStats()">Limpar</button>
+    </div>
+    <div id="statsResult"></div>
+  </div>
+</div>
+
+<!-- ═══════════════ TAB: FÓRMULAS ═══════════════ -->
+<div id="tab-formulas" class="tab-content">
+  <div class="formulas-panel">
+
+    <div class="formula-card" onclick="openFormula('mean')" style="cursor:pointer">
+      <div class="formula-name">Média Aritmética</div>
+      <div class="formula-expr">
+        <span class="fbar">x</span> =
+        <span class="ffrac">
+          <span class="fnum">Σ x<sub>i</sub></span>
+          <span class="fden">n</span>
+        </span>
+      </div>
+      <div class="formula-desc">Soma de todos os valores dividida pela quantidade <em>n</em> de dados.</div>
+    </div>
+
+    <div class="formula-card" onclick="openFormula('median')" style="cursor:pointer">
+      <div class="formula-name">Mediana</div>
+      <div class="formula-expr">
+        Md =
+        <span class="fcases">
+          <span>x<sub>(n+1)/2</sub> &nbsp; se <em>n</em> é ímpar</span>
+          <span>(x<sub>n/2</sub> + x<sub>n/2+1</sub>) / 2 &nbsp; se <em>n</em> é par</span>
+        </span>
+      </div>
+      <div class="formula-desc">Valor central dos dados ordenados em ordem crescente.</div>
+    </div>
+
+    <div class="formula-card" onclick="openFormula('mode')" style="cursor:pointer">
+      <div class="formula-name">Moda</div>
+      <div class="formula-expr">Mo = valor(es) de maior frequência</div>
+      <div class="formula-desc">Amodal: sem repetição &nbsp;·&nbsp; Unimodal: uma moda &nbsp;·&nbsp; Bimodal / Multimodal: duas ou mais modas.</div>
+    </div>
+
+    <div class="formula-card" onclick="openFormula('range')" style="cursor:pointer">
+      <div class="formula-name">Amplitude Total</div>
+      <div class="formula-expr">A = x<sub>máx</sub> − x<sub>mín</sub></div>
+      <div class="formula-desc">Diferença entre o maior e o menor valor do conjunto de dados.</div>
+    </div>
+
+    <div class="formula-card" onclick="openFormula('varpop')" style="cursor:pointer">
+      <div class="formula-name">Variância Populacional (&sigma;²)</div>
+      <div class="formula-expr">
+        &sigma;² =
+        <span class="ffrac">
+          <span class="fnum">Σ (x<sub>i</sub> − <span class="fbar">x</span>)²</span>
+          <span class="fden">n</span>
+        </span>
+      </div>
+      <div class="formula-desc">Média dos quadrados dos desvios. Usa <em>n</em> pois considera toda a população.</div>
+    </div>
+
+    <div class="formula-card" onclick="openFormula('varsam')" style="cursor:pointer">
+      <div class="formula-name">Variância Amostral (s²)</div>
+      <div class="formula-expr">
+        s² =
+        <span class="ffrac">
+          <span class="fnum">Σ (x<sub>i</sub> − <span class="fbar">x</span>)²</span>
+          <span class="fden">n − 1</span>
+        </span>
+      </div>
+      <div class="formula-desc">Divide por <em>n−1</em> (correção de Bessel) para estimar a variância da população a partir de uma amostra.</div>
+    </div>
+
+    <div class="formula-card" onclick="openFormula('stdpop')" style="cursor:pointer">
+      <div class="formula-name">Desvio Padrão Populacional (&sigma;)</div>
+      <div class="formula-expr">&sigma; = <span class="fsqrt">&radic;<span class="fsqrt-inner">&sigma;²</span></span></div>
+      <div class="formula-desc">Raiz quadrada da variância populacional. Mesma unidade de medida dos dados.</div>
+    </div>
+
+    <div class="formula-card" onclick="openFormula('stdsam')" style="cursor:pointer">
+      <div class="formula-name">Desvio Padrão Amostral (s)</div>
+      <div class="formula-expr">s = <span class="fsqrt">&radic;<span class="fsqrt-inner">s²</span></span></div>
+      <div class="formula-desc">Raiz quadrada da variância amostral. Indica o quanto os dados se afastam da média.</div>
+    </div>
+
+    <div class="formula-card" onclick="openFormula('quartiles')" style="cursor:pointer">
+      <div class="formula-name">Quartis (Q1, Q2, Q3)</div>
+      <div class="formula-expr">
+        Q<sub>1</sub> = Md<sub>inferior</sub> &nbsp;·&nbsp;
+        Q<sub>2</sub> = Mediana &nbsp;·&nbsp;
+        Q<sub>3</sub> = Md<sub>superior</sub>
+      </div>
+      <div class="formula-desc">Dividem os dados ordenados em quatro partes iguais de 25% cada.</div>
+    </div>
+
+    <div class="formula-card" onclick="openFormula('iqr')" style="cursor:pointer">
+      <div class="formula-name">Intervalo Interquartil (IQR)</div>
+      <div class="formula-expr">IQR = Q<sub>3</sub> − Q<sub>1</sub></div>
+      <div class="formula-desc">Abrange os 50% centrais dos dados. Resistente a valores extremos (outliers).</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════ TAB: HISTÓRICO ═══════════════ -->
+<div id="tab-history" class="tab-content">
+  <div class="history-panel">
+    <div class="history-header">
+      <span class="history-count" id="historyCount">0 cálculos</span>
+      <button class="action-btn danger" onclick="clearHistory()">🗑 Limpar</button>
+    </div>
+    <div id="historyList" class="history-list"></div>
+    <p class="history-empty" id="historyEmpty">Nenhum cálculo realizado ainda.<br>Os resultados aparecem aqui automaticamente.</p>
+  </div>
+</div>
+
+<!-- MODAL FÓRMULA -->
+<div id="formulaModal" class="fmodal-overlay" onclick="closeFormula(event)">
+  <div class="fmodal">
+    <button class="fmodal-close" onclick="closeFormulaBtn()">&times;</button>
+    <div class="fmodal-nav">
+      <button class="fmodal-arrow" id="fPrev" onclick="navigateFormula(-1)">&#8592;</button>
+      <span class="fmodal-counter" id="fCounter"></span>
+      <button class="fmodal-arrow" id="fNext" onclick="navigateFormula(1)">&#8594;</button>
+    </div>
+    <div id="fmodalBody" class="fmodal-body"></div>
+  </div>
+</div>
+
+<script src="calc.js"></script>
+<script src="stats.js"></script>
+<script>
+  const TAB_ORDER = ['calc', 'stats', 'formulas', 'history'];
+
+  function switchTab(id) {
+    document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
+    document.getElementById('tab-' + id).classList.add('active');
+    const idx = TAB_ORDER.indexOf(id);
+    document.querySelectorAll('.tab')[idx]?.classList.add('active');
+  }
+
+  function setTheme(t) {
+    document.documentElement.setAttribute('data-theme', t);
+    localStorage.setItem('calcTheme', t);
+  }
+  (function initTheme() {
+    const saved = localStorage.getItem('calcTheme') || 'dark';
+    document.documentElement.setAttribute('data-theme', saved);
+    document.getElementById('themeSelect').value = saved;
+  })();
+
+  /* ── MODAL DE FÓRMULAS ── */
+  const FORMULA_ORDER = ['mean','median','mode','range','varpop','varsam','stdpop','stdsam','quartiles','iqr'];
+  let fCurrentIdx = 0;
+
+  const FORMULAS = {
+    mean: {
+      name: 'Média Aritmética',
+      symbol: '<span class="fbar">x</span>',
+      expr: `<span class="fbar">x</span> = <span class="ffrac"><span class="fnum">Σ x<sub>i</sub></span><span class="fden">n</span></span>`,
+      when: 'Use quando os dados são numéricos e não há valores extremos (outliers) que distorcem o conjunto.',
+      how: `<ol>
+        <li>Some todos os valores do conjunto.</li>
+        <li>Divida pelo total de elementos <em>n</em>.</li>
+      </ol>`,
+      example: `Dados: <strong>4, 8, 6, 5, 3, 2, 8, 9, 2, 5</strong><br>
+        Soma = 4+8+6+5+3+2+8+9+2+5 = <strong>52</strong><br>
+        n = <strong>10</strong><br>
+        Média = 52 ÷ 10 = <strong>5,2</strong>`,
+      props: ['Sensível a outliers — um valor muito alto ou baixo puxa a média.','A soma dos desvios em relação à média é sempre zero: Σ(xᵢ − x̅) = 0.','Usada como base para cálculo da variância e desvio padrão.'],
+      note: 'Para dados com outliers, prefira a <strong>mediana</strong>. Para dados com proporções, use a média geométrica.'
+    },
+    median: {
+      name: 'Mediana',
+      symbol: 'Md',
+      expr: `Md = <span class="fcases"><span>x<sub>(n+1)/2</sub> &nbsp; se <em>n</em> é ímpar</span><span>(x<sub>n/2</sub> + x<sub>n/2+1</sub>) / 2 &nbsp; se <em>n</em> é par</span></span>`,
+      when: 'Use quando os dados têm outliers ou a distribuição é assimétrica. É a medida mais robusta de tendência central.',
+      how: `<ol>
+        <li>Ordene os dados em ordem crescente.</li>
+        <li>Se <em>n</em> é ímpar: pegue o elemento do meio.</li>
+        <li>Se <em>n</em> é par: calcule a média dos dois elementos centrais.</li>
+      </ol>`,
+      example: `<strong>Ímpar</strong> — Dados: 3, 5, 7, 9, 11 &rarr; Md = <strong>7</strong><br><br>
+        <strong>Par</strong> — Dados: 3, 5, 7, 9 &rarr; Md = (5+7)/2 = <strong>6</strong>`,
+      props: ['Não é afetada por outliers.','Divide o conjunto em duas metades iguais (50% abaixo, 50% acima).','Coincide com Q2 (segundo quartil).'],
+      note: 'Em distribuições simétricas, média = mediana = moda.'
+    },
+    mode: {
+      name: 'Moda',
+      symbol: 'Mo',
+      expr: 'Mo = valor(es) de maior frequência',
+      when: 'Use para identificar o valor mais comum. Úutil em dados categóricos (ex: cor favorita, tamanho de roupa).',
+      how: `<ol>
+        <li>Conte a frequência de cada valor.</li>
+        <li>O(s) valor(es) com maior frequência é(são) a moda.</li>
+      </ol>`,
+      example: `Dados: 2, 3, 4, <strong>4</strong>, 5, <strong>4</strong>, 6, 3, <strong>4</strong><br>
+        Frequências: 2→1, 3→2, <strong>4→3</strong>, 5→ 1, 6→1<br>
+        Mo = <strong>4</strong> (unimodal)`,
+      props: ['Amodal: nenhum valor se repete.','Unimodal: uma única moda.','Bimodal / Multimodal: duas ou mais modas com mesma frequência máxima.','Única medida aplicável a dados qualitativos.'],
+      note: 'A moda pode não existir (amodal) ou ser múltipla, ao contrário da média e mediana.'
+    },
+    range: {
+      name: 'Amplitude Total',
+      symbol: 'A',
+      expr: 'A = x<sub>máx</sub> − x<sub>mín</sub>',
+      when: 'Use para ter uma ideia rápida da dispersão dos dados. É a medida de dispersão mais simples.',
+      how: `<ol>
+        <li>Identifique o maior valor do conjunto.</li>
+        <li>Identifique o menor valor do conjunto.</li>
+        <li>Subtraia: A = máximo − mínimo.</li>
+      </ol>`,
+      example: `Dados: 3, 7, 2, 9, 4, 1, 8<br>
+        Máximo = <strong>9</strong>, Mínimo = <strong>1</strong><br>
+        A = 9 − 1 = <strong>8</strong>`,
+      props: ['Muito sensível a outliers — um único valor extremo muda tudo.','Não considera a distribuição interna dos dados.','Fácil e rápida de calcular.'],
+      note: 'Para uma medida de dispersão mais robusta, use o <strong>IQR</strong> ou o <strong>desvio padrão</strong>.'
+    },
+    varpop: {
+      name: 'Variância Populacional',
+      symbol: 'σ²',
+      expr: `σ² = <span class="ffrac"><span class="fnum">Σ (x<sub>i</sub> − <span class="fbar">x</span>)²</span><span class="fden">n</span></span>`,
+      when: 'Use quando você tem <strong>todos</strong> os dados da população (não apenas uma amostra).',
+      how: `<ol>
+        <li>Calcule a média <span class="fbar">x</span>.</li>
+        <li>Para cada valor, calcule (xᵢ − <span class="fbar">x</span>)².</li>
+        <li>Some todos os quadrados.</li>
+        <li>Divida por <em>n</em> (total de elementos).</li>
+      </ol>`,
+      example: `Dados: 2, 4, 4, 4, 5, 5, 7, 9 &nbsp; (n=8)<br>
+        Média = 5<br>
+        Desvios²: 9, 1, 1, 1, 0, 0, 4, 16<br>
+        Soma = 32 &nbsp;÷&nbsp; 8 = <strong>σ² = 4</strong>`,
+      props: ['Sempre ≥ 0. Vale 0 somente se todos os valores são iguais.','Unidade ao quadrado (ex: se dados em kg, variância em kg²).','Base para o cálculo do desvio padrão.'],
+      note: 'Se os dados são uma <strong>amostra</strong>, use a variância amostral (divide por n−1).'
+    },
+    varsam: {
+      name: 'Variância Amostral',
+      symbol: 's²',
+      expr: `s² = <span class="ffrac"><span class="fnum">Σ (x<sub>i</sub> − <span class="fbar">x</span>)²</span><span class="fden">n − 1</span></span>`,
+      when: 'Use quando os dados são uma <strong>amostra</strong> de uma população maior e você quer estimar a variância real.',
+      how: `<ol>
+        <li>Calcule a média <span class="fbar">x</span>.</li>
+        <li>Para cada valor, calcule (xᵢ − <span class="fbar">x</span>)².</li>
+        <li>Some todos os quadrados.</li>
+        <li>Divida por <em>n − 1</em> (correção de Bessel).</li>
+      </ol>`,
+      example: `Mesmos dados: 2, 4, 4, 4, 5, 5, 7, 9 &nbsp; (n=8)<br>
+        Soma dos desvios² = 32<br>
+        32 ÷ (8−1) = 32 ÷ 7 ≈ <strong>s² = 4,57</strong>`,
+      props: ['Divide por n−1 para corrigir o viés da estimativa (correção de Bessel).','Sempre maior que a variância populacional para o mesmo conjunto.','Estimador não-viesado da variância populacional.'],
+      note: 'A correção de Bessel (n−1) compensa o fato de que a média amostral já usa os dados, reduzindo 1 grau de liberdade.'
+    },
+    stdpop: {
+      name: 'Desvio Padrão Populacional',
+      symbol: 'σ',
+      expr: `σ = <span class="fsqrt">&radic;<span class="fsqrt-inner">σ²</span></span> = <span class="fsqrt">&radic;<span class="fsqrt-inner"><span class="ffrac"><span class="fnum">Σ(x<sub>i</sub>−<span class="fbar">x</span>)²</span><span class="fden">n</span></span></span></span>`,
+      when: 'Use para medir a dispersão dos dados na <strong>mesma unidade</strong> dos dados originais, quando tem toda a população.',
+      how: `<ol>
+        <li>Calcule a variância populacional σ².</li>
+        <li>Tire a raiz quadrada: σ = √σ².</li>
+      </ol>`,
+      example: `Continuando o exemplo anterior:<br>
+        σ² = 4<br>
+        σ = √4 = <strong>2</strong><br>
+        Os dados se afastam em média <strong>2 unidades</strong> da média.`,
+      props: ['Mesma unidade dos dados originais (ao contrário da variância).','Quanto maior o σ, mais espalhados os dados.','σ = 0 significa que todos os valores são iguais.'],
+      note: 'Regra empírica (distribuição normal): ~68% dos dados ficam entre μ±σ, ~95% entre μ±2σ, ~99,7% entre μ±3σ.'
+    },
+    stdsam: {
+      name: 'Desvio Padrão Amostral',
+      symbol: 's',
+      expr: `s = <span class="fsqrt">&radic;<span class="fsqrt-inner">s²</span></span> = <span class="fsqrt">&radic;<span class="fsqrt-inner"><span class="ffrac"><span class="fnum">Σ(x<sub>i</sub>−<span class="fbar">x</span>)²</span><span class="fden">n−1</span></span></span></span>`,
+      when: 'Use quando os dados são uma amostra e você quer estimar o desvio padrão da população.',
+      how: `<ol>
+        <li>Calcule a variância amostral s².</li>
+        <li>Tire a raiz quadrada: s = √s².</li>
+      </ol>`,
+      example: `s² = 4,57 (do exemplo anterior)<br>
+        s = √4,57 ≈ <strong>2,14</strong><br>
+        Os dados amostrais se afastam em média <strong>2,14 unidades</strong> da média.`,
+      props: ['Sempre ligeiramente maior que o desvio padrão populacional para os mesmos dados.','Usado em testes de hipótese e intervalos de confiança.','O coeficiente de variação CV = (s / <span class="fbar">x</span>) × 100% usa o desvio amostral.'],
+      note: 'Na prática científica e acadêmica, o desvio amostral é o mais utilizado, pois raramente temos acesso à população inteira.'
+    },
+    quartiles: {
+      name: 'Quartis',
+      symbol: 'Q₁, Q₂, Q₃',
+      expr: `Q<sub>1</sub> = Md<sub>inferior</sub> &nbsp;·&nbsp; Q<sub>2</sub> = Mediana &nbsp;·&nbsp; Q<sub>3</sub> = Md<sub>superior</sub>`,
+      when: 'Use para entender a distribuição dos dados em quatro partes iguais e identificar a concentração dos valores.',
+      how: `<ol>
+        <li>Ordene os dados em ordem crescente.</li>
+        <li>Q2 = mediana de todo o conjunto.</li>
+        <li>Q1 = mediana da metade inferior (abaixo de Q2).</li>
+        <li>Q3 = mediana da metade superior (acima de Q2).</li>
+      </ol>`,
+      example: `Dados: 1, 3, 5, 7, 9, 11, 13, 15 &nbsp; (n=8)<br>
+        Q2 = (7+9)/2 = <strong>8</strong><br>
+        Metade inferior: 1,3,5,7 &rarr; Q1 = (3+5)/2 = <strong>4</strong><br>
+        Metade superior: 9,11,13,15 &rarr; Q3 = (11+13)/2 = <strong>12</strong>`,
+      props: ['Q1: 25% dos dados estão abaixo.','Q2: 50% dos dados estão abaixo (= mediana).','Q3: 75% dos dados estão abaixo.','Base para o diagrama de caixa (boxplot).'],
+      note: 'O boxplot é uma representação gráfica dos quartis: caixa de Q1 a Q3, linha em Q2, bigodes até os extremos.'
+    },
+    iqr: {
+      name: 'Intervalo Interquartil',
+      symbol: 'IQR',
+      expr: 'IQR = Q<sub>3</sub> − Q<sub>1</sub>',
+      when: 'Use para medir a dispersão dos 50% centrais dos dados, ignorando outliers. É mais robusto que a amplitude total.',
+      how: `<ol>
+        <li>Calcule Q1 e Q3.</li>
+        <li>IQR = Q3 − Q1.</li>
+      </ol>`,
+      example: `Do exemplo anterior:<br>
+        Q1 = 4, Q3 = 12<br>
+        IQR = 12 − 4 = <strong>8</strong>`,
+      props: ['Não é afetado por outliers.','Abrange os 50% centrais dos dados.','Critério de Tukey para outliers: valores abaixo de Q1−1,5×IQR ou acima de Q3+1,5×IQR são considerados outliers.'],
+      note: 'Limite inferior de outlier: Q1 − 1,5 × IQR &nbsp;·&nbsp; Limite superior: Q3 + 1,5 × IQR'
+    }
+  };
+
+  function openFormula(id) {
+    fCurrentIdx = FORMULA_ORDER.indexOf(id);
+    renderFormulaModal();
+    const modal = document.getElementById('formulaModal');
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function renderFormulaModal() {
+    const id = FORMULA_ORDER[fCurrentIdx];
+    const f  = FORMULAS[id];
+    document.getElementById('fCounter').textContent = (fCurrentIdx + 1) + ' / ' + FORMULA_ORDER.length;
+    document.getElementById('fmodalBody').innerHTML = `
+      <div class="fmodal-header">
+        <div class="fmodal-symbol">${f.symbol}</div>
+        <h2 class="fmodal-title">${f.name}</h2>
+      </div>
+      <div class="fmodal-formula">${f.expr}</div>
+      <div class="fmodal-sections">
+        <div class="fmodal-section">
+          <div class="fmodal-section-title">📌 Quando usar</div>
+          <div class="fmodal-section-body">${f.when}</div>
+        </div>
+        <div class="fmodal-section">
+          <div class="fmodal-section-title">📝 Como calcular</div>
+          <div class="fmodal-section-body">${f.how}</div>
+        </div>
+        <div class="fmodal-section">
+          <div class="fmodal-section-title">📊 Exemplo numérico</div>
+          <div class="fmodal-section-body example">${f.example}</div>
+        </div>
+        <div class="fmodal-section">
+          <div class="fmodal-section-title">✨ Propriedades</div>
+          <ul class="fmodal-props">${f.props.map(p => '<li>' + p + '</li>').join('')}</ul>
+        </div>
+        <div class="fmodal-note">💡 ${f.note}</div>
+      </div>
+    `;
+  }
+
+  function navigateFormula(dir) {
+    fCurrentIdx = (fCurrentIdx + dir + FORMULA_ORDER.length) % FORMULA_ORDER.length;
+    const body = document.getElementById('fmodalBody');
+    body.style.animation = 'none';
+    void body.offsetWidth;
+    body.style.animation = '';
+    renderFormulaModal();
+  }
+
+  function closeFormulaBtn() {
+    document.getElementById('formulaModal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function closeFormula(e) {
+    if (e.target === document.getElementById('formulaModal')) closeFormulaBtn();
+  }
+
+  document.addEventListener('keydown', e => {
+    const modal = document.getElementById('formulaModal');
+    if (!modal.classList.contains('open')) return;
+    if (e.key === 'Escape')     closeFormulaBtn();
+    if (e.key === 'ArrowRight') navigateFormula(1);
+    if (e.key === 'ArrowLeft')  navigateFormula(-1);
+  });
+</script>
+</body>
+</html>
